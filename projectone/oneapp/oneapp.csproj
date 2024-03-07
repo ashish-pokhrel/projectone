@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Services\" />
+    <None Remove="Repos\" />
+    <None Remove="Models\" />
+    <None Remove="Entities\" />
+    <None Remove="Utilities\" />
+    <None Remove="Models\Category\" />
+    <None Remove="Repos\Category\" />
+    <None Remove="Services\Category\" />
+    <None Remove="Repos\DbConnection\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Repos\" />
+    <Folder Include="Models\" />
+    <Folder Include="Entities\" />
+    <Folder Include="Utilities\" />
+    <Folder Include="Models\Category\" />
+    <Folder Include="Repos\Category\" />
+    <Folder Include="Services\Category\" />
+    <Folder Include="Repos\DbConnection\" />
+  </ItemGroup>
+</Project>

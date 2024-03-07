@@ -1,0 +1,37 @@
+﻿<Properties StartupConfiguration="{E077EF7D-0A26-4EF3-B349-8EFDCF9D83BD}|Default">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.oneapp PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="oneapp/Controllers/CategoryController.cs">
+    <Files>
+      <File FileName="oneapp/Repos/Category/CategoryRepo.cs" />
+      <File FileName="oneapp/Program.cs" />
+      <File FileName="oneapp/Startup.cs" />
+      <File FileName="oneapp/CustomExceptionHandler.cs" />
+      <File FileName="oneapp/appsettings.json" />
+      <File FileName="oneapp/Utilities/SwaggerFileUploadFilter.cs" />
+      <File FileName="oneapp/Controllers/CategoryController.cs" Line="8" Column="40" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="projectone" expanded="True">
+            <Node name="oneapp" expanded="True">
+              <Node name="Controllers" expanded="True">
+                <Node name="CategoryController.cs" selected="True" />
+              </Node>
+              <Node name="Repos" expanded="True">
+                <Node name="Category" expanded="True" />
+              </Node>
+              <Node name="Utilities" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>
