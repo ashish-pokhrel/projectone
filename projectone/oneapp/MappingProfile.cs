@@ -10,6 +10,8 @@ namespace oneapp
         {
             CreateMap<Category, CategoryResponse>();
             CreateMap<CategoryRequest, Category>();
+
+            CreateMap<CommentRequest, Comment>();
         }
     }
 

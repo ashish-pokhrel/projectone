@@ -31,6 +31,9 @@
     <None Remove="Models\Feed\" />
     <None Remove="Repos\Feed\" />
     <None Remove="Repos\ImageHub\" />
+    <None Remove="Services\Comment\" />
+    <None Remove="Repos\Comment\" />
+    <None Remove="Models\Comment\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -48,5 +51,8 @@
     <Folder Include="Models\Feed\" />
     <Folder Include="Repos\Feed\" />
     <Folder Include="Repos\ImageHub\" />
+    <Folder Include="Services\Comment\" />
+    <Folder Include="Repos\Comment\" />
+    <Folder Include="Models\Comment\" />
   </ItemGroup>
 </Project>
