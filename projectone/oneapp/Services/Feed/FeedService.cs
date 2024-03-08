@@ -13,12 +13,15 @@ namespace oneapp.Services
         private readonly IMapper _mapper;
         private readonly IFileService _fileService;
         private readonly IImageHubRepo _imageHubRepo;
-        public FeedService(IFeedRepo feedRepo, IMapper mapper, IFileService fileService, IImageHubRepo imageHubRepo)
+        private readonly ICategoryRepo _categoryRepo;
+
+        public FeedService(IFeedRepo feedRepo, IMapper mapper, IFileService fileService, IImageHubRepo imageHubRepo, ICategoryRepo categoryRepo)
         {
             _feedRepo = feedRepo;
             _mapper = mapper;
             _fileService = fileService;
             _imageHubRepo = imageHubRepo;
+            _categoryRepo = categoryRepo;
         }
 
         public async Task<FeedResponse> AddAsync(FeedRequest model)
@@ -42,19 +45,22 @@ namespace oneapp.Services
             };
             try
             {
-                foreach (var image in model.FeedImages)
+                if (model.FeedImages != null)
                 {
-                    var fileName = await _fileService.UploadFileAsync(image);
-                    imageList.Add(fileName);
-                    var imageHubEntity = new ImageHub
+                    foreach (var image in model.FeedImages)
                     {
-                        Id = Guid.NewGuid(),
-                        ImagePath = fileName,
-                        IsActive = true,
-                        TableId = entity.Id,
-                        TableName = "Feed"
-                    };
-                    await _imageHubRepo.AddAsync(imageHubEntity);
+                        var fileName = await _fileService.UploadFileAsync(image);
+                        imageList.Add(fileName);
+                        var imageHubEntity = new ImageHub
+                        {
+                            Id = Guid.NewGuid(),
+                            ImagePath = fileName,
+                            IsActive = true,
+                            TableId = entity.Id,
+                            TableName = "Feed"
+                        };
+                        await _imageHubRepo.AddAsync(imageHubEntity);
+                    }
                 }
 
                 var result = await _feedRepo.AddAsync(entity);
@@ -102,13 +108,13 @@ namespace oneapp.Services
         private async Task<FeedResponse> GetFeedResponseFromEntity(Feed data)
         {
             var images = await _imageHubRepo.GetByTableIdAsync(data.Id);
-
+            var category = await _categoryRepo.GetByIdAsync(data.CategoryId);
             return new FeedResponse
             {
                 Content = data.Content,
                 TotalShares = data.TotalShares,
-                CategoryName = "",
-                CreatedByName = "",
+                CategoryName = category.CategoryName,
+                CreatedByName = "", // TODO
                 CreatedOn = data.CreatedOn,
                 Id = data.Id,
                 TotalLikes = data.TotalLikes,
