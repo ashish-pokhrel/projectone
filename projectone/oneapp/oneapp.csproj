@@ -26,6 +26,11 @@
     <None Remove="Services\Category\" />
     <None Remove="Repos\DbConnection\" />
     <None Remove="Services\BlobStorage\" />
+    <None Remove="Models\ImageHub\" />
+    <None Remove="Services\Feed\" />
+    <None Remove="Models\Feed\" />
+    <None Remove="Repos\Feed\" />
+    <None Remove="Repos\ImageHub\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -38,5 +43,10 @@
     <Folder Include="Services\Category\" />
     <Folder Include="Repos\DbConnection\" />
     <Folder Include="Services\BlobStorage\" />
+    <Folder Include="Models\ImageHub\" />
+    <Folder Include="Services\Feed\" />
+    <Folder Include="Models\Feed\" />
+    <Folder Include="Repos\Feed\" />
+    <Folder Include="Repos\ImageHub\" />
   </ItemGroup>
 </Project>

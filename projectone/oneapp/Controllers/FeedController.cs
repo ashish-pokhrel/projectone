@@ -1,40 +1,47 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using oneapp.Models;
+using oneapp.Services;
 
 namespace oneapp.Controllers
 {
     [Route("api/[controller]")]
     public class FeedController : Controller
     {
+        private readonly IFeedService _feedService;
+
+        public FeedController(IFeedService feedService)
+        {
+            _feedService = feedService ?? throw new ArgumentNullException(nameof(feedService));
+        }
+
         // GET: api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<FeedListModel>> Get(Guid categoryId,int skip = 0, int take = 10, string searchValue = "")
         {
-            return new string[] { "value1", "value2" };
+            return await _feedService.Get(categoryId, skip, take, searchValue);
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<FeedResponse>> Get(Guid id)
         {
-            return "value";
+            return await _feedService.GetByIdAsync(id);
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<ActionResult<FeedResponse>> AddAsync([FromForm] FeedRequest model)
         {
+            var response = await _feedService.AddAsync(model);
+            return CreatedAtAction(nameof(Get), new { id = response.Id }, response);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<ActionResult<FeedResponse>> Put(Guid id, [FromForm] FeedRequest model)
         {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var response = await _feedService.UpdateAsync(id, model);
+            return Ok(response);
         }
     }
 }

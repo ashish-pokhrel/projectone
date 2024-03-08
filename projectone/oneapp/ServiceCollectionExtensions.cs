@@ -21,6 +21,11 @@ namespace oneapp
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICategoryRepo, CategoryRepo>();
 
+            services.AddScoped<IFeedService, FeedService>();
+            services.AddScoped<IFeedRepo, FeedRepo>();
+
+            services.AddScoped<IImageHubRepo, ImageHubRepo>();
+
         }
     }
 

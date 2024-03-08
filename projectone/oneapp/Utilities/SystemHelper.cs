@@ -6,6 +6,7 @@ namespace oneapp.Utilities
         public static DateTimeOffset GetCurrentDate()
         { return DateTimeOffset.UtcNow; }
 
+        // TODO
         public static Guid GetCurrentUser()
         { return new Guid("099cdfc5-82d2-4ddb-b7e5-84aef3f86c80"); }
 
