@@ -1,34 +1,56 @@
 ﻿<Properties StartupConfiguration="{E077EF7D-0A26-4EF3-B349-8EFDCF9D83BD}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="oneapp/Startup.cs">
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workbench ActiveDocument="oneapp/Controllers/CategoryController.cs">
     <Files>
-      <File FileName="oneapp/Services/Category/CategoryService.cs" />
-      <File FileName="oneapp/MappingProfile.cs" />
-      <File FileName="oneapp/Startup.cs" Line="27" Column="77" />
+      <File FileName="oneapp/Services/BlobStorage/IFileService.cs" Line="6" Column="34" />
+      <File FileName="oneapp/Services/BlobStorage/FileService.cs" Line="22" Column="29" />
+      <File FileName="oneapp/Services/Category/CategoryService.cs" Line="30" Column="57" />
+      <File FileName="oneapp/Program.cs" Line="13" Column="54" />
+      <File FileName="oneapp/ServiceCollectionExtensions.cs" Line="16" Column="134" />
+      <File FileName="oneapp/appsettings.json" Line="15" Column="1" />
+      <File FileName="oneapp/Controllers/CategoryController.cs" Line="41" Column="1" />
+      <File FileName="oneapp/CustomExceptionHandler.cs" Line="23" Column="1" />
+      <File FileName="oneapp/Models/Category/CategoryRequest.cs" Line="8" Column="6" />
+      <File FileName="oneapp/Startup.cs" Line="25" Column="16" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="projectone" expanded="True">
-            <Node name="oneapp" expanded="True">
-              <Node name="Services" expanded="True">
+          <Node name="projectone">
+            <Node name="oneapp">
+              <Node name="Controllers" expanded="True">
+                <Node name="CategoryController.cs" selected="True" />
+              </Node>
+              <Node name="Entities" expanded="True" />
+              <Node name="Models" expanded="True">
                 <Node name="Category" expanded="True" />
               </Node>
+              <Node name="Repos" expanded="True">
+                <Node name="Category" expanded="True" />
+                <Node name="DbConnection" expanded="True" />
+              </Node>
+              <Node name="Services">
+                <Node name="BlobStorage" expanded="True" />
+              </Node>
+              <Node name="Utilities" expanded="True" />
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.oneapp PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/ashish/Documents/Project/projectone/projectone/oneapp/Repos/Category/CategoryRepo.cs" relfile="oneapp/Repos/Category/CategoryRepo.cs" line="18" column="1" />
-      <Breakpoint file="/Users/ashish/Documents/Project/projectone/projectone/oneapp/Repos/Category/CategoryRepo.cs" relfile="oneapp/Repos/Category/CategoryRepo.cs" line="24" column="1" />
-      <Breakpoint file="/Users/ashish/Documents/Project/projectone/projectone/oneapp/Repos/Category/CategoryRepo.cs" relfile="oneapp/Repos/Category/CategoryRepo.cs" line="43" column="1" />
-      <Breakpoint file="/Users/ashish/Documents/Project/projectone/projectone/oneapp/Repos/Category/CategoryRepo.cs" relfile="oneapp/Repos/Category/CategoryRepo.cs" line="48" column="1" />
+      <Breakpoint file="/Users/ashish/Documents/Project/projectone/projectone/oneapp/Repos/Category/CategoryRepo.cs" relfile="oneapp/Repos/Category/CategoryRepo.cs" line="55" column="1" />
+      <Breakpoint file="/Users/ashish/Documents/Project/projectone/projectone/oneapp/Repos/Category/CategoryRepo.cs" relfile="oneapp/Repos/Category/CategoryRepo.cs" line="60" column="1" />
+      <Breakpoint file="/Users/ashish/Documents/Project/projectone/projectone/oneapp/Services/Category/CategoryService.cs" relfile="oneapp/Services/Category/CategoryService.cs" line="46" column="1" />
+      <Breakpoint file="/Users/ashish/Documents/Project/projectone/projectone/oneapp/Controllers/CategoryController.cs" relfile="oneapp/Controllers/CategoryController.cs" line="45" column="1" />
+      <Breakpoint file="/Users/ashish/Documents/Project/projectone/projectone/oneapp/CustomExceptionHandler.cs" relfile="oneapp/CustomExceptionHandler.cs" line="23" column="1" />
+      <Breakpoint file="/Users/ashish/Documents/Project/projectone/projectone/oneapp/Services/Category/CategoryService.cs" relfile="oneapp/Services/Category/CategoryService.cs" line="31" column="1" />
+      <Breakpoint file="/Users/ashish/Documents/Project/projectone/projectone/oneapp/Controllers/CategoryController.cs" relfile="oneapp/Controllers/CategoryController.cs" line="37" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.oneapp PreferredExecutionTarget="/Applications/Google Chrome.app" />
 </Properties>

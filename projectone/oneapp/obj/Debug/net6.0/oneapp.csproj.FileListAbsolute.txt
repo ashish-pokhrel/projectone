@@ -104,3 +104,10 @@
 /Users/ashish/Documents/Project/projectone/projectone/oneapp/obj/Debug/net6.0/ref/oneapp.dll
 /Users/ashish/Documents/Project/projectone/projectone/oneapp/bin/Debug/net6.0/AutoMapper.dll
 /Users/ashish/Documents/Project/projectone/projectone/oneapp/bin/Debug/net6.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+/Users/ashish/Documents/Project/projectone/projectone/oneapp/bin/Debug/net6.0/Azure.Core.dll
+/Users/ashish/Documents/Project/projectone/projectone/oneapp/bin/Debug/net6.0/Azure.Storage.Blobs.dll
+/Users/ashish/Documents/Project/projectone/projectone/oneapp/bin/Debug/net6.0/Azure.Storage.Common.dll
+/Users/ashish/Documents/Project/projectone/projectone/oneapp/bin/Debug/net6.0/Microsoft.Bcl.AsyncInterfaces.dll
+/Users/ashish/Documents/Project/projectone/projectone/oneapp/bin/Debug/net6.0/System.IO.Hashing.dll
+/Users/ashish/Documents/Project/projectone/projectone/oneapp/bin/Debug/net6.0/System.Memory.Data.dll
+/Users/ashish/Documents/Project/projectone/projectone/oneapp/bin/Debug/net6.0/Newtonsoft.Json.dll

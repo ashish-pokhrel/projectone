@@ -1,4 +1,7 @@
-﻿namespace oneapp
+﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+
+namespace oneapp
 {
     public class Startup
     {
@@ -15,6 +18,11 @@
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = long.MaxValue; // Set the limit to the maximum value
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
