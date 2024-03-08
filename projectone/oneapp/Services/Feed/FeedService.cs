@@ -76,9 +76,7 @@ namespace oneapp.Services
                 var feed = await GetFeedResponseFromEntity(data);
                 feeds.Add(feed);
             }
-            var responseModel = _mapper.Map<IEnumerable<FeedResponse>>(result.Item1);
-
-            return new FeedListModel { Count = result.Item2, List = responseModel };
+            return new FeedListModel { Count = result.Item2, List = feeds };
         }
 
         public async Task<FeedResponse> GetByIdAsync(Guid id)
