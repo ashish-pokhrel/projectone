@@ -43,6 +43,22 @@ namespace oneapp.Controllers
             var response = await _feedService.UpdateAsync(id, model);
             return Ok(response);
         }
+
+        // PUT api/values/5
+        [HttpPut("like/{id}")]
+        public async Task<ActionResult<FeedResponse>> Like(Guid id, int count)
+        {
+            var response = await _feedService.UpdateLikeAsync(id, count);
+            return Ok(response);
+        }
+
+        // PUT api/values/5
+        [HttpPut("share/{id}")]
+        public async Task<ActionResult<FeedResponse>> Share(Guid id, int count)
+        {
+            var response = await _feedService.UpdateShareAsync(id, count);
+            return Ok(response);
+        }
     }
 }
 

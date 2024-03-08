@@ -13,15 +13,12 @@ namespace oneapp.Services
         private readonly IMapper _mapper;
         private readonly IFileService _fileService;
         private readonly IImageHubRepo _imageHubRepo;
-        private readonly ICategoryRepo _categoryRepo;
-
-        public FeedService(IFeedRepo feedRepo, IMapper mapper, IFileService fileService, IImageHubRepo imageHubRepo, ICategoryRepo categoryRepo)
+        public FeedService(IFeedRepo feedRepo, IMapper mapper, IFileService fileService, IImageHubRepo imageHubRepo)
         {
             _feedRepo = feedRepo;
             _mapper = mapper;
             _fileService = fileService;
             _imageHubRepo = imageHubRepo;
-            _categoryRepo = categoryRepo;
         }
 
         public async Task<FeedResponse> AddAsync(FeedRequest model)
@@ -45,22 +42,19 @@ namespace oneapp.Services
             };
             try
             {
-                if (model.FeedImages != null)
+                foreach (var image in model.FeedImages)
                 {
-                    foreach (var image in model.FeedImages)
+                    var fileName = await _fileService.UploadFileAsync(image);
+                    imageList.Add(fileName);
+                    var imageHubEntity = new ImageHub
                     {
-                        var fileName = await _fileService.UploadFileAsync(image);
-                        imageList.Add(fileName);
-                        var imageHubEntity = new ImageHub
-                        {
-                            Id = Guid.NewGuid(),
-                            ImagePath = fileName,
-                            IsActive = true,
-                            TableId = entity.Id,
-                            TableName = "Feed"
-                        };
-                        await _imageHubRepo.AddAsync(imageHubEntity);
-                    }
+                        Id = Guid.NewGuid(),
+                        ImagePath = fileName,
+                        IsActive = true,
+                        TableId = entity.Id,
+                        TableName = "Feed"
+                    };
+                    await _imageHubRepo.AddAsync(imageHubEntity);
                 }
 
                 var result = await _feedRepo.AddAsync(entity);
@@ -87,34 +81,49 @@ namespace oneapp.Services
 
         public async Task<FeedResponse> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var feed = await _feedRepo.GetByIdAsync(id);
+            return await GetFeedResponseFromEntity(feed);
         }
 
         public async Task<FeedResponse> UpdateAsync(Guid id, FeedRequest model)
         {
-            throw new NotImplementedException();
+            var feed = await _feedRepo.GetByIdAsync(id);
+            feed.Content = model.Content;
+            feed.UpdatedBy = SystemHelper.GetCurrentUser();
+            feed.UpdatedOn = SystemHelper.GetCurrentDate();
+
+            await _feedRepo.UpdateAsync(feed);
+            return await GetFeedResponseFromEntity(feed);
         }
 
         public async Task<FeedResponse> UpdateLikeAsync(Guid id, int count)
         {
-            throw new NotImplementedException();
+            var feed = await _feedRepo.GetByIdAsync(id);
+            feed.TotalLikes += count;
+
+            await _feedRepo.UpdateAsync(feed);
+            return await GetFeedResponseFromEntity(feed);
         }
 
         public async Task<FeedResponse> UpdateShareAsync(Guid id, int count)
         {
-            throw new NotImplementedException();
+            var feed = await _feedRepo.GetByIdAsync(id);
+            feed.TotalShares += count;
+
+            await _feedRepo.UpdateAsync(feed);
+            return await GetFeedResponseFromEntity(feed);
         }
 
         private async Task<FeedResponse> GetFeedResponseFromEntity(Feed data)
         {
             var images = await _imageHubRepo.GetByTableIdAsync(data.Id);
-            var category = await _categoryRepo.GetByIdAsync(data.CategoryId);
+
             return new FeedResponse
             {
                 Content = data.Content,
                 TotalShares = data.TotalShares,
-                CategoryName = category.CategoryName,
-                CreatedByName = "", // TODO
+                CategoryName = "",
+                CreatedByName = "",
                 CreatedOn = data.CreatedOn,
                 Id = data.Id,
                 TotalLikes = data.TotalLikes,

@@ -51,7 +51,7 @@ namespace oneapp.Repos
             return await _context.Feed.FindAsync(id);
         }
 
-        public async Task<Feed> UpdateAsync(Guid id, Feed entity)
+        public async Task<Feed> UpdateAsync(Feed entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
