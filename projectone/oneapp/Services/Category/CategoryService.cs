@@ -1,28 +1,59 @@
-﻿using System;
+﻿using AutoMapper;
+using oneapp.Entities;
 using oneapp.Models;
+using oneapp.Repos;
+using oneapp.Utilities;
 
 namespace oneapp.Services
 {
     public class CategoryService : ICategoryService
     {
-        public Task AddAsync(CategoryRequest entity)
+        private readonly ICategoryRepo _categoryRepo;
+        private readonly IMapper _mapper;
+
+        public CategoryService(ICategoryRepo categoryRepo, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _categoryRepo = categoryRepo;
+            _mapper = mapper;
         }
 
-        public Task<CategoryViewModel> Get(int page = 0, int size = 10, string searchValue = "")
+
+        public async Task<CategoryResponse> AddAsync(CategoryRequest model)
         {
-            throw new NotImplementedException();
+            var entity = _mapper.Map<Category>(model);
+            entity.Id = Guid.NewGuid();
+            entity.ImagePath = "";
+            entity.UpdatedOn = SystemHelper.GetCurrentDate();
+            entity.UpdatedBy = SystemHelper.GetCurrentUser();
+            var result = await _categoryRepo.AddAsync(entity);
+            return _mapper.Map<CategoryResponse>(result);
         }
 
-        public Task<CategoryResponse> GetByIdAsync(Guid id)
+        public async Task<CategoryViewModel> Get(int skip = 0, int size = 10, string searchValue = "")
         {
-            throw new NotImplementedException();
+            var result = await _categoryRepo.Get(skip, size, searchValue);
+            var responseModel = _mapper.Map<IEnumerable<CategoryResponse>>(result.Item1);
+            return new CategoryViewModel { Count = result.Item2, List = responseModel };
         }
 
-        public Task UpdateAsync(Guid id, CategoryRequest entity)
+        public async Task<CategoryResponse> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _categoryRepo.GetByIdAsync(id);
+            var response = _mapper.Map<CategoryResponse>(result);
+            return response;
+        }
+
+        public async Task<CategoryResponse> UpdateAsync(Guid id, CategoryRequest model)
+        {
+            ArgumentNullException.ThrowIfNull(id);
+
+            var entity = _mapper.Map<Category>(model);
+            entity.Id = id;
+            entity.ImagePath = "";
+            entity.UpdatedOn = SystemHelper.GetCurrentDate();
+            entity.UpdatedBy = SystemHelper.GetCurrentUser();
+            var result = await _categoryRepo.AddAsync(entity);
+            return _mapper.Map<CategoryResponse>(result);
         }
     }
 }

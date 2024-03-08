@@ -1,43 +1,50 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using oneapp.Models;
+using oneapp.Services;
 
 namespace oneapp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("AllowSpecificOrigin")]
     public class CategoryController : Controller
     {
+        private readonly ICategoryService _categoryService;
+
+        public CategoryController(ICategoryService categoryService)
+        {
+            _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
+        }
+
+
         // GET: api/values
         [HttpGet]
-        public IEnumerable<string> Get(int page = 0, int size = 10, string searchValue = "")
+        public async Task<ActionResult<CategoryViewModel>> Get(int skip = 0, int take = 10, string searchValue = "")
         {
-            return new string[] { "value1", "value2" };
+            return await _categoryService.Get(skip, take, searchValue);
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<CategoryResponse>> Get(Guid id)
         {
-            return "value";
+            return await _categoryService.GetByIdAsync(id);
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<ActionResult<CategoryRequest>> AddAsync([FromForm] CategoryRequest model)
         {
+            var response = await _categoryService.AddAsync(model);
+            return CreatedAtAction(nameof(Get), new { id = response.Id }, response);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<ActionResult<CategoryResponse>> Put(Guid id, [FromForm] CategoryRequest model)
         {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var response = await _categoryService.UpdateAsync(id, model);
+            return Ok(response);
         }
     }
 }

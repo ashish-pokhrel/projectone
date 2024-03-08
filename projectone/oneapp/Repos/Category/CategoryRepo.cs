@@ -1,37 +1,65 @@
 ﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using oneapp.Entities;
+using oneapp.Models;
 using oneapp.Repos.DbConnection;
 
 namespace oneapp.Repos
 {
     public class CategoryRepo : ICategoryRepo
     {
-        private readonly DbConnectionFactory _dbConnectionFactory;
-        private readonly IDbConnection _dbConnection;
+        private readonly AppDbContext _context;
 
-        public CategoryRepo(DbConnectionFactory dbConnectionFactory)
+        public CategoryRepo(AppDbContext context)
         {
-            this._dbConnectionFactory = dbConnectionFactory ?? throw new ArgumentNullException(nameof(dbConnectionFactory));
-            this._dbConnection = _dbConnectionFactory.CreateConnection();
+            _context = context;
         }
-        public Task AddAsync(Category entity)
+        public async Task<Category> AddAsync(Category entity)
         {
-            throw new NotImplementedException();
+
+            if (!string.IsNullOrWhiteSpace(entity.CategoryName))
+            {
+                var hasDuplicate = _context.Category.AsQueryable().Any(e => e.CategoryName.Contains(entity.CategoryName));
+                if(hasDuplicate)
+                {
+                    throw new DuplicateNameException();
+                }
+            }
+
+            _context.Category.Add(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public Task<Tuple<Category, int>> Get(int page = 0, int size = 10, string searchValue = "")
+        public async Task<(IEnumerable<Category>, int)> Get(int skip = 0, int size = 10, string searchValue = "")
         {
-            throw new NotImplementedException();
+            var query = _context.Category.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchValue))
+            {
+                query = query.Where(e => e.CategoryName.Contains(searchValue));
+                // Add other filters as needed
+            }
+
+            // Get the total count before paginating
+            var totalCount = await query.CountAsync();
+
+            // Paginate the filtered query
+            var entities = await query.Skip(skip).Take(size).ToListAsync();
+
+            return (entities, totalCount);
         }
 
-        public Task<Category> GetByIdAsync(Guid id)
+        public async Task<Category> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Category.FindAsync(id);
         }
 
-        public Task UpdateAsync(Guid id, Category entity)
+        public async Task<Category> UpdateAsync(Category entity)
         {
-            throw new NotImplementedException();
+            _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return entity;
         }
     }
 }
