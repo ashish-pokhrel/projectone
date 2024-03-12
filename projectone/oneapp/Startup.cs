@@ -19,6 +19,16 @@ namespace oneapp
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder
+                        .WithOrigins("http://localhost:7107")  // Add your client origin
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
             services.Configure<FormOptions>(options =>
             {
                 options.MultipartBodyLengthLimit = long.MaxValue; // Set the limit to the maximum value
@@ -35,6 +45,7 @@ namespace oneapp
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("AllowSpecificOrigin");
             //app.UseAuthentication();
             //app.UseCors("AllowSpecificOrigin");
             app.UseHttpsRedirection();

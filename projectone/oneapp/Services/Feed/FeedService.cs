@@ -3,22 +3,23 @@ using oneapp.Entities;
 using oneapp.Models;
 using oneapp.Repos;
 using oneapp.Utilities;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace oneapp.Services
 {
 	public class FeedService : IFeedService
 	{
         private readonly IFeedRepo _feedRepo;
+        private readonly ICategoryRepo _categoryRepo;
         private readonly IMapper _mapper;
         private readonly IFileService _fileService;
         private readonly IImageHubRepo _imageHubRepo;
-        public FeedService(IFeedRepo feedRepo, IMapper mapper, IFileService fileService, IImageHubRepo imageHubRepo)
+        public FeedService(IFeedRepo feedRepo, IMapper mapper, IFileService fileService, IImageHubRepo imageHubRepo, ICategoryRepo categoryRepo)
         {
             _feedRepo = feedRepo;
             _mapper = mapper;
             _fileService = fileService;
             _imageHubRepo = imageHubRepo;
+            _categoryRepo = categoryRepo;
         }
 
         public async Task<FeedResponse> AddAsync(FeedRequest model)
@@ -117,12 +118,13 @@ namespace oneapp.Services
         private async Task<FeedResponse> GetFeedResponseFromEntity(Feed data)
         {
             var images = await _imageHubRepo.GetByTableIdAsync(data.Id);
+            var category = await _categoryRepo.GetByIdAsync(data.CategoryId);
 
             return new FeedResponse
             {
                 Content = data.Content,
                 TotalShares = data.TotalShares,
-                CategoryName = "",
+                CategoryName = category.CategoryName,
                 CreatedByName = "",
                 CreatedOn = data.CreatedOn,
                 Id = data.Id,

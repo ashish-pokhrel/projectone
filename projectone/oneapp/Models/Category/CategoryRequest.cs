@@ -6,7 +6,7 @@ namespace oneapp.Models
 	{
         [Required]
         public string CategoryName { get; set; }
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
         [Required]
         public bool ShowInMenu { get; set; }
     }

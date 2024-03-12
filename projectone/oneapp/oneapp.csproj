@@ -34,6 +34,7 @@
     <None Remove="Services\Comment\" />
     <None Remove="Repos\Comment\" />
     <None Remove="Models\Comment\" />
+    <None Remove="Models\Login\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -54,5 +55,6 @@
     <Folder Include="Services\Comment\" />
     <Folder Include="Repos\Comment\" />
     <Folder Include="Models\Comment\" />
+    <Folder Include="Models\Login\" />
   </ItemGroup>
 </Project>

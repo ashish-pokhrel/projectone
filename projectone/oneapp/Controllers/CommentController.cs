@@ -39,7 +39,7 @@ namespace oneapp.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<ActionResult<CommentResponse>> AddAsync([FromForm] CommentRequest model)
+        public async Task<ActionResult<CommentResponse>> AddAsync([FromBody] CommentRequest model)
         {
             var response = await _commentService.AddAsync(model);
             return CreatedAtAction(nameof(Get), new { id = response.Id }, response);
