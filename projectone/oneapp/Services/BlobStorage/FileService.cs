@@ -49,19 +49,28 @@ namespace oneapp.Services
             var blobContainerClient = _blobServiceClient.GetBlobContainerClient(ContainerName);
             var blobClient =  blobContainerClient.GetBlobClient(fileName);
 
+            // Check if the blob exists
+            bool exists = await blobClient.ExistsAsync();
+
+            // Check if the blob exists
+            if (!exists)
+            {
+                return null; 
+            }
+
             var sasBuilder = new BlobSasBuilder()
             {
                 BlobContainerName = ContainerName,
                 BlobName = blobClient.Name,
                 Resource = "c", // "b" for blobs
-                ExpiresOn = DateTimeOffset.UtcNow.AddHours(1),
+                ExpiresOn = DateTimeOffset.UtcNow.AddDays(1),
                 StartsOn = DateTimeOffset.UtcNow.AddMinutes(-5),
             };
 
             sasBuilder.SetPermissions(BlobSasPermissions.Read);
             var sasToken = sasBuilder.ToSasQueryParameters(new StorageSharedKeyCredential(blobContainerClient.AccountName, SharedAzureBlobKey));
 
-            var imageUrlWithSas = $"{blobContainerClient.Uri}?{sasToken}";
+            var imageUrlWithSas = $"{blobClient.Uri}?{sasToken}";
 
             return await Task.FromResult(imageUrlWithSas);
         }

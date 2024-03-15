@@ -41,10 +41,10 @@ namespace oneapp
             app.UseCustomExceptionHandler();
             if (env.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+               
             }
-
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.UseCors("AllowSpecificOrigin");
             //app.UseAuthentication();
             //app.UseCors("AllowSpecificOrigin");

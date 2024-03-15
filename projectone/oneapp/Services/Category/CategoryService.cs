@@ -43,6 +43,7 @@ namespace oneapp.Services
         public async Task<CategoryViewModel> Get(int skip = 0, int size = 10, string searchValue = "")
         {
             var result = await _categoryRepo.Get(skip, size, searchValue);
+            result.Item1?.ToList().ForEach(x => x.ImagePath = _fileService.GetFullUrl(x.ImagePath)?.Result);
             var responseModel = _mapper.Map<IEnumerable<CategoryResponse>>(result.Item1);
             return new CategoryViewModel { Count = result.Item2, List = responseModel };
         }

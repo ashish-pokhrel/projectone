@@ -119,6 +119,11 @@ namespace oneapp.Services
         {
             var images = await _imageHubRepo.GetByTableIdAsync(data.Id);
             var category = await _categoryRepo.GetByIdAsync(data.CategoryId);
+            var imagePaths = new List<string>();
+            foreach (var image in images)
+            {
+                imagePaths.Add(await _fileService.GetFullUrl(image.ImagePath));
+            }
 
             return new FeedResponse
             {
@@ -132,7 +137,7 @@ namespace oneapp.Services
                 Tags = data.Tags,
                 ProfileImage = "", // TODO
                 Title = data.Title,
-                Images = images.Select(x => x.ImagePath),
+                Images = imagePaths,
             };
         }
     }
