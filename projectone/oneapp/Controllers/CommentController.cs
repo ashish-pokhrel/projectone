@@ -7,7 +7,7 @@ using oneapp.Services;
 
 namespace oneapp.Controllers
 {
-    [Authorize(Roles = "NormalUser")]
+    [Authorize(Roles = "Admin, NormalUser")]
     [Route("api/[controller]")]
     public class CommentController : Controller
     {
