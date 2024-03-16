@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using oneapp.Entities;
 using oneapp.Models;
+using oneapp.Models.Auth;
 using oneapp.Repos;
 
 namespace oneapp.Services
@@ -16,7 +17,7 @@ namespace oneapp.Services
 
         public async Task<IdentityResult> RegisterAsync(RegisterViewModel model)
         {
-            var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
             return await _userRepository.CreateUserAsync(user, model.Password);
         }
 

@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using oneapp.Entities;
+using oneapp.Models.Auth;
 
 namespace oneapp.Repos
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser, IdentityRole, string,
+    public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string,
                                      IdentityUserClaim<string>, IdentityUserRole<string>,
                                      IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
@@ -26,9 +27,11 @@ namespace oneapp.Repos
             var uName = "admin@example.com";
 
             // Create default admin user
-            var adminUser = new IdentityUser
+            var adminUser = new ApplicationUser
             {
                 Id = "3e5e6b36-8fab-4aa3-91ad-025cce8a4151",
+                FirstName = "Root",
+                LastName = "User",
                 UserName = uName,
                 Email = uName,
                 NormalizedEmail = uName.ToUpper(),
@@ -36,10 +39,10 @@ namespace oneapp.Repos
                 EmailConfirmed = true // Assuming the email is confirmed
             };
 
-            var passwordHasher = new PasswordHasher<IdentityUser>();
+            var passwordHasher = new PasswordHasher<ApplicationUser>();
             adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "root");
 
-            modelBuilder.Entity<IdentityUser>().HasData(adminUser);
+            modelBuilder.Entity<ApplicationUser>().HasData(adminUser);
 
             // Create roles
             var adminRole = new IdentityRole

@@ -1,35 +1,36 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using oneapp.Entities;
+using oneapp.Models.Auth;
 
 namespace oneapp.Repos
 {
     public class UserRepo : IUserRepository
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UserRepo(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public UserRepo(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
-        public async Task<IdentityUser> FindByEmailAsync(string email)
+        public async Task<ApplicationUser> FindByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
         }
 
-        public async Task<bool> CheckPasswordAsync(IdentityUser user, string password)
+        public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
         {
             return await _userManager.CheckPasswordAsync(user, password);
         }
 
-        public async Task<IdentityResult> CreateUserAsync(IdentityUser user, string password)
+        public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password)
         {
             return await _userManager.CreateAsync(user, password);
         }
 
-        public async Task<SignInResult> SignInAsync(IdentityUser user, string password, bool rememberMe)
+        public async Task<SignInResult> SignInAsync(ApplicationUser user, string password, bool rememberMe)
         {
             return await _signInManager.PasswordSignInAsync(user, password, rememberMe, lockoutOnFailure: false);
         }

@@ -1,13 +1,24 @@
-﻿using Microsoft.AspNetCore.Http.Features;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using oneapp.Entities;
+using oneapp.Models.Auth;
 using oneapp.Repos;
+using System;
+using System.Linq;
+using System.Text;
 
 namespace oneapp
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -19,22 +30,28 @@ namespace oneapp
             services.AddCustomServices(Configuration);
             services.AddControllers();
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
 
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
                     builder => builder
-                        .WithOrigins(Configuration.GetSection("AllowSpecificOrigin").Value) 
+                        .WithOrigins(Configuration.GetSection("AllowSpecificOrigin").Value)
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
             });
 
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             // Add Identity services
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                   .AddEntityFrameworkStores<AppDbContext>()
-                   .AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddAuthorization(options =>
             {
@@ -42,13 +59,9 @@ namespace oneapp
                 options.AddPolicy("NormalUser", policy => policy.RequireRole("NormalUser"));
             });
 
-
-
-            var passwordRequirements = Configuration.GetSection("PasswordRequirements");
             // Configure Identity options
             services.Configure<IdentityOptions>(options =>
             {
-                // Password settings.
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireNonAlphanumeric = true;
@@ -56,24 +69,14 @@ namespace oneapp
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 1;
 
-                // Lockout settings.
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
 
-                // User settings.
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
-
-
-            //var faceBookAuth = Configuration.GetSection("FaceBookAuth");
-            //services.AddAuthentication().AddFacebook(opt =>
-            //{
-            //    opt.AppId = faceBookAuth.GetSection("AppId").Value;
-            //    opt.AppSecret = faceBookAuth.GetSection("AppSecret").Value;
-            //});
 
             services.Configure<FormOptions>(options =>
             {
@@ -82,20 +85,21 @@ namespace oneapp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCustomExceptionHandler();
             if (env.IsDevelopment())
             {
-               
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
             }
-            app.UseSwagger();
-            app.UseSwaggerUI();
+
             app.UseCors("AllowSpecificOrigin");
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
