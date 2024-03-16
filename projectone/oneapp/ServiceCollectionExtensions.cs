@@ -35,6 +35,7 @@ namespace oneapp
             services.AddScoped<IImageHubRepo, ImageHubRepo>();
 
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository, UserRepo>();
 
         }

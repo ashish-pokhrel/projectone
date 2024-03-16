@@ -27,15 +27,15 @@ namespace oneapp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _authService.RegisterAsync(model);
+            var result = await _authService.RegisterAsync(model, string.Empty);
 
-            if (result.Succeeded)
+            if (result.Item1.Succeeded)
             {
-                return Ok(new { Message = "Registration successful" });
+                return Ok(result.Item2);
             }
             else
             {
-                return BadRequest(new { Error = "Registration failed", Errors = result.Errors });
+                return BadRequest(new { Error = "Registration failed", Errors = result.Item1 });
             }
         }
 
@@ -49,13 +49,13 @@ namespace oneapp.Controllers
 
             var result = await _authService.LoginAsync(model);
 
-            if (result.Succeeded)
+            if (result.Item1.Succeeded)
             {
-                return Ok(new { Message = "Login successful" });
+                return Ok(result.Item2);
             }
             else
             {
-                return BadRequest(new { Error = "Login failed" });
+                return BadRequest(new { Error = "Registration failed", Errors = result.Item1 });
             }
         }
 

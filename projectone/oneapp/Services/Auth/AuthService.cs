@@ -1,49 +1,80 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using oneapp.Entities;
 using oneapp.Models;
-using oneapp.Models.Auth;
 using oneapp.Repos;
+using oneapp.Utilities;
+using System.Threading.Tasks;
 
 namespace oneapp.Services
 {
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ITokenService _tokenService;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AuthService(IUserRepository userRepository)
+        public AuthService(IUserRepository userRepository, ITokenService tokenService, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userRepository = userRepository;
+            _tokenService = tokenService;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
-        public async Task<IdentityResult> RegisterAsync(RegisterViewModel model)
+        public async Task<(SignInResult, AuthenticationModel)> RegisterAsync(RegisterViewModel model, string role)
         {
+            if(string.IsNullOrEmpty(role))
+            {
+                role = RolesConstant.NORMALUSER;
+            }
+
             var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-            return await _userRepository.CreateUserAsync(user, model.Password);
+            var result = await _userRepository.CreateUserAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                // Assign roles to the user
+                await AssignRolesToUser(user, role);
+
+                // Generate token
+                var tokenResult = await _tokenService.GetTokenAsync(user.Email);
+                return (SignInResult.Success, tokenResult);
+            }
+
+            return (SignInResult.Failed, null);
         }
 
-        public async Task<SignInResult> LoginAsync(LoginViewModel model)
+        public async Task<(SignInResult, AuthenticationModel)> LoginAsync(LoginViewModel model)
         {
             var user = await _userRepository.FindByEmailAsync(model.Email);
             if (user == null)
             {
                 // User not found
-                return SignInResult.Failed;
+                return (SignInResult.Failed, null);
             }
 
-            var isPasswordValid = await _userRepository.CheckPasswordAsync(user, model.Password);
-            if (!isPasswordValid)
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+            if (result.Succeeded)
             {
-                // Incorrect password
-                return SignInResult.Failed;
+                var tokenResult = await _tokenService.GetTokenAsync(user.Email);
+                return (SignInResult.Success, tokenResult);
             }
 
-            return await _userRepository.SignInAsync(user, model.Password, model.RememberMe);
+            return (SignInResult.Failed, null);
         }
 
         public async Task LogoutAsync()
         {
-            await _userRepository.SignOutAsync();
+            await _signInManager.SignOutAsync();
+        }
+
+        private async Task AssignRolesToUser(ApplicationUser user, string role)
+        {
+            if (!await _roleManager.RoleExistsAsync(role))
+            {
+                // Create the role if it doesn't exist
+                await _roleManager.CreateAsync(new IdentityRole(role));
+            }
+            await _userRepository.AddToRoleAsync(user, role);
         }
     }
 }
-

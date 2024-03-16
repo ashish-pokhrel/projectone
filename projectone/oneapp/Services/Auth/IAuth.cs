@@ -5,8 +5,8 @@ namespace oneapp.Services
 {
     public interface IAuthService
     {
-        Task<IdentityResult> RegisterAsync(RegisterViewModel model);
-        Task<SignInResult> LoginAsync(LoginViewModel model);
+        Task<(SignInResult, AuthenticationModel)> RegisterAsync(RegisterViewModel model, string role);
+        Task<(SignInResult, AuthenticationModel)> LoginAsync(LoginViewModel model);
         Task LogoutAsync();
     }
 }

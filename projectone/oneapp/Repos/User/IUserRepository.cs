@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using oneapp.Entities;
-using oneapp.Models.Auth;
+using oneapp.Models;
 
 namespace oneapp.Repos
 {
@@ -11,6 +10,8 @@ namespace oneapp.Repos
         Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password);
         Task<SignInResult> SignInAsync(ApplicationUser user, string password, bool rememberMe);
         Task SignOutAsync();
+        Task<List<string>> GetRolesAsync(ApplicationUser user);
+        Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string role);
     }
 }
 

@@ -1,9 +1,11 @@
 ﻿using System;
+using oneapp.Models;
+
 namespace oneapp.Services
 {
     public interface ITokenService
     {
-        string GenerateToken(string userId);
+        Task<AuthenticationModel> GetTokenAsync(string email);
     }
 }
 

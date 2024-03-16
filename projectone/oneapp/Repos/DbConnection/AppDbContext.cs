@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using oneapp.Entities;
-using oneapp.Models.Auth;
+using oneapp.Models;
+using oneapp.Utilities;
 
 namespace oneapp.Repos
 {
@@ -23,7 +24,11 @@ namespace oneapp.Repos
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            CreateUser(modelBuilder);
+        }
 
+        private void CreateUser(ModelBuilder modelBuilder)
+        {
             var uName = "admin@example.com";
 
             // Create default admin user
@@ -48,15 +53,15 @@ namespace oneapp.Repos
             var adminRole = new IdentityRole
             {
                 Id = "1",
-                Name = "Admin",
-                NormalizedName = "ADMIN"
+                Name = RolesConstant.Admin,
+                NormalizedName = RolesConstant.Admin
             };
 
             var userRole = new IdentityRole
             {
                 Id = "2",
-                Name = "User",
-                NormalizedName = "USER"
+                Name = RolesConstant.NORMALUSER,
+                NormalizedName = RolesConstant.NORMALUSER
             };
 
             modelBuilder.Entity<IdentityRole>().HasData(adminRole, userRole);

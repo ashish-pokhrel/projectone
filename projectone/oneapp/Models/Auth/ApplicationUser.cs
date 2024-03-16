@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity;
 
-namespace oneapp.Models.Auth
+namespace oneapp.Models
 {
     public class ApplicationUser : IdentityUser
     {
