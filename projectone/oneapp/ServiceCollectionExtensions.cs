@@ -13,10 +13,15 @@ namespace oneapp
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-            var azureConnections = configuration.GetSection("AzureBlobStorage");
-            services.AddScoped<IFileService>(provider =>new FileService(azureConnections.GetSection("AzureBlobStorageConnection").Value,
-                azureConnections.GetSection("ContainerName").Value,
-                azureConnections.GetSection("SharedAzureBlobKey").Value));
+
+            // FOR PRODUCTION ONLY
+            //var azureConnections = configuration.GetSection("AzureBlobStorage");
+            //services.AddScoped<IFileService>(provider =>new FileService(azureConnections.GetSection("AzureBlobStorageConnection").Value,
+            //    azureConnections.GetSection("ContainerName").Value,
+            //    azureConnections.GetSection("SharedAzureBlobKey").Value));
+
+
+            services.AddScoped<IFileService, FileServiceStub>();
 
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICategoryRepo, CategoryRepo>();
