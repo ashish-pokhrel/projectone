@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using Microsoft.AspNetCore.Mvc;
 using oneapp.Models;
 using oneapp.Services;
 
 namespace oneapp.Controllers
 {
+    [Authorize(Roles = "NormalUser")]
     [Route("api/[controller]")]
     public class FeedController : Controller
     {

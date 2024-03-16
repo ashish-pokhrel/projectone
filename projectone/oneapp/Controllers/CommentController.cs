@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using oneapp.Models;
 using oneapp.Services;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace oneapp.Controllers
 {
+    [Authorize(Roles = "NormalUser")]
     [Route("api/[controller]")]
     public class CommentController : Controller
     {

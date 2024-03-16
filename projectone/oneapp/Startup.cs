@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using oneapp.Entities;
+using oneapp.Repos;
 
 namespace oneapp
 {
@@ -23,11 +25,55 @@ namespace oneapp
             {
                 options.AddPolicy("AllowSpecificOrigin",
                     builder => builder
-                        .WithOrigins("http://localhost:7107")  // Add your client origin
+                        .WithOrigins(Configuration.GetSection("AllowSpecificOrigin").Value) 
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
             });
+
+            // Add Identity services
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                   .AddEntityFrameworkStores<AppDbContext>()
+                   .AddDefaultTokenProviders();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("NormalUser", policy => policy.RequireRole("NormalUser"));
+            });
+
+
+
+            var passwordRequirements = Configuration.GetSection("PasswordRequirements");
+            // Configure Identity options
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
+
+
+            //var faceBookAuth = Configuration.GetSection("FaceBookAuth");
+            //services.AddAuthentication().AddFacebook(opt =>
+            //{
+            //    opt.AppId = faceBookAuth.GetSection("AppId").Value;
+            //    opt.AppSecret = faceBookAuth.GetSection("AppSecret").Value;
+            //});
 
             services.Configure<FormOptions>(options =>
             {
@@ -46,10 +92,10 @@ namespace oneapp
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseCors("AllowSpecificOrigin");
-            //app.UseAuthentication();
-            //app.UseCors("AllowSpecificOrigin");
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthorization();
+            app.UseAuthentication();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -26,7 +26,11 @@ namespace oneapp.Services
             entity.Id = Guid.NewGuid();
             entity.UpdatedOn = SystemHelper.GetCurrentDate();
             entity.UpdatedBy = SystemHelper.GetCurrentUser();
-            var fileName = await _fileService.UploadFileAsync(model.Image);
+            var fileName = string.Empty;
+            if (model.Image != null)
+            {
+                fileName = await _fileService.UploadFileAsync(model.Image);
+            }
             entity.ImagePath = fileName;
             try
             {

@@ -2,7 +2,6 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using oneapp.Entities;
-using oneapp.Repos.DbConnection;
 
 namespace oneapp.Repos
 {
